@@ -1,0 +1,11 @@
+[Unit]
+Description=Kisstnc %I ax25 interface
+Requires=direwolf@%i.service
+After=direwolf@%i.service
+
+[Service]
+Type=simple
+ExecStart=/usr/sbin/kissattach /run/direwolf/%i %i
+
+[Install]
+WantedBy=multi-user.target

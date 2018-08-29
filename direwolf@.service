@@ -1,0 +1,12 @@
+[Unit]
+Description=Direwolf %I soundcard modem
+
+[Service]
+Type=simple
+PrivateTmp=true
+ExecStart=/usr/bin/direwolf -t 0 -p -c /etc/direwolf/%i.conf -q h -q d
+ExecStartPost=/bin/sh -c 'while ! test -c /tmp/kisstnc; do sleep 1; done; cp -a /tmp/kisstnc /run/direwolf/%i'
+ExecStopPost=/bin/rm -f /run/direwolf/%i
+
+[Install]
+WantedBy=multi-user.target
