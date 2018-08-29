@@ -1,13 +1,20 @@
 systemd_unit_dir = /lib/systemd/system
 sysconfdir = /etc/direwolf
+tmpfilesdir = /etc/tmpfiles.d
 
 SERVICES = \
 	   direwolf@.service \
 	   kisstnc@.service
 
+TMPFILES = \
+	   direwolf.conf
+
 all:
 
-install: install-config install-services
+install: install-config install-services install-tmpfiles
+
+install-tmpfiles: $(TMPFILES)
+	install -m 644 $(TMPFILES) $(tmpfilesdir)
 
 install-config:
 	install -m 755 -d $(DESTDIR)$(sysconfdir)
