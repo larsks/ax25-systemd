@@ -3,9 +3,18 @@ Description=Direwolf %I soundcard modem
 
 [Service]
 Type=simple
+
+# Because the path /tmp/kisstnc is hardcoded in Direwolf, we give eac instance
+# of Direwolf it's own /tmp directory by setting PrivateTmp=true. We can then
+# copy the symlink to a distinct per-instance location in ExecStartPost.
 PrivateTmp=true
+
 ExecStart=/usr/bin/direwolf -t 0 -p -c /etc/direwolf/%i.conf -q h -q d
+
+# Wait for /tmp/kisstnc to show up, then copy it into /run/direwolf.
 ExecStartPost=/bin/timeout 10 /bin/sh -c 'while ! test -c /tmp/kisstnc; do sleep 1; done; cp -a /tmp/kisstnc /run/direwolf/%i'
+
+# Clean up symlink on exit.
 ExecStopPost=/bin/rm -f /run/direwolf/%i
 
 [Install]
